@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ロボット研究会 - Robot Research Club</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+            background: #000;
+        }
+        
+        /* Loading Screen */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-text {
+            color: #00ffff;
+            font-size: 24px;
+            font-weight: 700;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        /* UI Overlays */
+        .ui-panel {
+            position: fixed;
+            background: rgba(0, 20, 40, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #fff;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .main-title {
+            top: 20px;
+            left: 20px;
+            max-width: 400px;
+        }
+        
+        .main-title h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .main-title p {
+            font-size: 14px;
+            margin: 5px 0;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        
+        .info-panel {
+            top: 20px;
+            right: 20px;
+            max-width: 300px;
+        }
+        
+        .info-panel h2 {
+            font-size: 18px;
+            color: #ffff00;
+            margin: 0 0 10px 0;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .info-list li {
+            padding: 5px 0;
+            font-size: 14px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        
+        .join-panel {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        
+        .join-button {
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .join-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+        }
+        
+        .stats-panel {
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .stat-value {
+            color: #00ff00;
+            font-weight: 700;
+        }
+        
+        /* Controls hint */
+        .controls-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ui-panel {
+                font-size: 12px;
+                padding: 15px;
+            }
+            
+            .main-title h1 {
+                font-size: 20px;
+            }
+            
+            .main-title,
+            .info-panel {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+            
+            .info-panel {
+                top: auto;
+                bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loading-text">システム起動中...</div>
+    </div>
+    
+    <!-- Main UI Panels -->
+    <div class="ui-panel main-title">
+        <h1>ROBOT RESEARCH CLUB</h1>
+        <p>未来を創造する仲間を募集</p>
+        <p>Join us to build the future</p>
+    </div>
+    
+    <div class="ui-panel info-panel">
+        <h2>研究分野 / Research Areas</h2>
+        <ul class="info-list">
+            <li>🤖 自律制御ロボット</li>
+            <li>🧠 AI・機械学習</li>
+            <li>🦾 ヒューマノイド開発</li>
+            <li>🚁 ドローン技術</li>
+            <li>🔬 センサー技術</li>
+            <li>⚡ 組み込みシステム</li>
+        </ul>
+    </div>
+    
+    <div class="ui-panel join-panel">
+        <h3 style="margin-top: 0;">一緒に未来を作りませんか？</h3>
+        <button class="join-button" onclick="joinClub()">入会を検討する</button>
+        <p style="margin: 10px 0 0 0; color: #ccc; font-size: 12px;">
+            マウスで視点変更 | クリックでロボット生成
+        </p>
+    </div>
+    
+    <div class="ui-panel stats-panel">
+        <h3 style="margin-top: 0; font-size: 14px;">活動実績</h3>
+        <div class="stat-item">
+            <span>メンバー数:</span>
+            <span class="stat-value" id="memberCount">45</span>
+        </div>
+        <div class="stat-item">
+            <span>プロジェクト数:</span>
+            <span class="stat-value" id="projectCount">12</span>
+        </div>
+        <div class="stat-item">
+            <span>完成ロボット:</span>
+            <span class="stat-value" id="robotCount">8</span>
+        </div>
+    </div>
+    
+    <div class="controls-hint">
+        マウス移動: 視点変更 | クリック: ロボット生成 | スクロール: ズーム
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="robot-club.js"></script>
+</body>
+</html>
