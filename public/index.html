@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ロボット研究会 - Robot Research Club</title>
+    <title>東洋大学川越キャンパス ロボット研究会</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -11,21 +11,22 @@
             overflow: hidden; 
             font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
             background: #000;
+            cursor: crosshair;
         }
         
-        /* Loading Screen */
         #loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: radial-gradient(circle, #001122 0%, #000000 100%);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 1s ease;
+            transition: opacity 2s ease;
         }
         
         .loading-text {
@@ -40,47 +41,47 @@
             50% { opacity: 1; }
         }
         
-        /* UI Overlays */
         .ui-panel {
             position: fixed;
-            background: rgba(0, 20, 40, 0.9);
+            background: rgba(0, 30, 60, 0.9);
             border: 2px solid #00ffff;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
             color: #fff;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
         }
         
-        .main-title {
+        .club-title {
             top: 20px;
             left: 20px;
             max-width: 400px;
         }
         
-        .main-title h1 {
+        .club-title h1 {
             font-size: 28px;
             margin: 0 0 10px 0;
             color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+            text-shadow: 0 0 15px #00ffff;
         }
         
-        .main-title p {
-            font-size: 14px;
+        .club-subtitle {
+            font-size: 16px;
             margin: 5px 0;
-            font-family: 'Noto Sans JP', sans-serif;
+            color: #cccccc;
         }
         
-        .info-panel {
+        .club-info {
             top: 20px;
             right: 20px;
-            max-width: 300px;
+            max-width: 350px;
         }
         
-        .info-panel h2 {
+        .club-info h2 {
             font-size: 18px;
             color: #ffff00;
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
+            text-shadow: 0 0 10px #ffff00;
         }
         
         .info-list {
@@ -90,15 +91,37 @@
         }
         
         .info-list li {
-            padding: 5px 0;
+            padding: 8px 0;
             font-size: 14px;
-            font-family: 'Noto Sans JP', sans-serif;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        .contact-panel {
+            bottom: 20px;
+            left: 20px;
+            max-width: 320px;
+        }
+        
+        .contact-panel h3 {
+            color: #00ff88;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            text-shadow: 0 0 10px #00ff88;
+        }
+        
+        .email-link {
+            color: #00ffff;
+            text-decoration: none;
+        }
+        
+        .email-link:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 8px #ff00ff;
         }
         
         .join-panel {
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px;
             text-align: center;
         }
         
@@ -111,123 +134,343 @@
             color: #fff;
             border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
         }
         
         .join-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
         }
         
-        .stats-panel {
-            bottom: 20px;
-            right: 20px;
-            font-size: 12px;
+        .activity-panel {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 450px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
+        .activity-panel.show {
+            opacity: 1;
         }
         
-        .stat-value {
-            color: #00ff00;
-            font-weight: 700;
+        .activity-panel h3 {
+            color: #ff6600;
+            font-size: 20px;
+            margin: 0 0 15px 0;
+            text-align: center;
+            text-shadow: 0 0 15px #ff6600;
         }
         
-        /* Controls hint */
-        .controls-hint {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
             .ui-panel {
                 font-size: 12px;
-                padding: 15px;
+                padding: 12px;
+                margin: 5px;
             }
             
-            .main-title h1 {
+            .club-title h1 {
                 font-size: 20px;
             }
             
-            .main-title,
-            .info-panel {
+            .activity-panel {
                 position: fixed;
-                top: 10px;
+                top: auto;
+                bottom: 100px;
                 left: 10px;
                 right: 10px;
                 max-width: none;
-            }
-            
-            .info-panel {
-                top: auto;
-                bottom: 80px;
+                transform: none;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loading">
-        <div class="loading-text">システム起動中...</div>
+        <div class="loading-text">ロボット研究会システム起動中...</div>
     </div>
     
-    <!-- Main UI Panels -->
-    <div class="ui-panel main-title">
-        <h1>ROBOT RESEARCH CLUB</h1>
-        <p>未来を創造する仲間を募集</p>
-        <p>Join us to build the future</p>
+    <div class="ui-panel club-title">
+        <h1>東洋大学 川越キャンパス</h1>
+        <div class="club-subtitle">ロボット研究会</div>
+        <div class="club-subtitle">TOYO ROBOTICS CLUB</div>
+        <!-- <div class="club-subtitle">🤖 次世代ロボット技術研究</div> -->
     </div>
     
-    <div class="ui-panel info-panel">
-        <h2>研究分野 / Research Areas</h2>
+    <div class="ui-panel club-info">
+        <h2>🚀 活動分野・技術領域</h2>
         <ul class="info-list">
-            <li>🤖 自律制御ロボット</li>
-            <li>🧠 AI・機械学習</li>
-            <li>🦾 ヒューマノイド開発</li>
-            <li>🚁 ドローン技術</li>
-            <li>🔬 センサー技術</li>
-            <li>⚡ 組み込みシステム</li>
+            <li>🔬 AI・機械学習システム</li>
+            <li>🤖 ヒューマノイドロボット</li>
+            <li>🎮 ロボット制御プログラミング</li>
+            <li>🛠️ メカトロニクス設計</li>
+            <li>📡 IoT・センサー技術</li>
+            <li>🏆 ロボコン・競技会参加</li>
         </ul>
     </div>
     
+    <div class="ui-panel contact-panel">
+        <h3>📞 お問い合わせ</h3>
+        <div>
+            <div>📍 東洋大学川越キャンパス</div>
+            <div>📧 <a href="mailto:toyotobo@gmail.com" class="email-link">toyotobo@gmail.com</a></div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,255,255,0.3);">
+                <div>⏰ 活動日時: 自由参加制</div>             
+                <div>💰 部費・会費は無し</div>
+                <div>🎯 個人の興味・スケジュールに応じて活動</div>
+            </div>
+        </div>
+    </div>
+    
     <div class="ui-panel join-panel">
-        <h3 style="margin-top: 0;">一緒に未来を作りませんか？</h3>
-        <button class="join-button" onclick="joinClub()">入会を検討する</button>
-        <p style="margin: 10px 0 0 0; color: #ccc; font-size: 12px;">
-            マウスで視点変更 | クリックでロボット生成
-        </p>
+        <h3 style="margin: 0 0 15px 0; color: #00ffff;">部員募集中！</h3>
+        <button class="join-button" onclick="showActivities()">活動内容を見る</button>
     </div>
     
-    <div class="ui-panel stats-panel">
-        <h3 style="margin-top: 0; font-size: 14px;">活動実績</h3>
-        <div class="stat-item">
-            <span>メンバー数:</span>
-            <span class="stat-value" id="memberCount">45</span>
+    <div class="ui-panel activity-panel" id="activityPanel">
+        <h3>🔧 活動内容詳細</h3>
+        <div>
+            <div style="margin: 10px 0; padding: 8px 12px; background: rgba(255, 102, 0, 0.1); border-left: 3px solid #ff6600;">
+                <strong>🏆 競技会・イベント参加</strong><br>
+                ロボコン、技術コンテストへの挑戦
+            </div>
+            <div style="margin: 10px 0; padding: 8px 12px; background: rgba(255, 102, 0, 0.1); border-left: 3px solid #ff6600;">
+                <strong>🛠️ ロボット製作</strong><br>
+                アイデアから実機まで、オリジナルロボット開発
+            </div>
+            <div style="margin: 10px 0; padding: 8px 12px; background: rgba(255, 102, 0, 0.1); border-left: 3px solid #ff6600;">
+                <strong>💻 プログラミング</strong><br>
+                AI、制御系、センサー処理の実装
+            </div>
         </div>
-        <div class="stat-item">
-            <span>プロジェクト数:</span>
-            <span class="stat-value" id="projectCount">12</span>
-        </div>
-        <div class="stat-item">
-            <span>完成ロボット:</span>
-            <span class="stat-value" id="robotCount">8</span>
-        </div>
-    </div>
-    
-    <div class="controls-hint">
-        マウス移動: 視点変更 | クリック: ロボット生成 | スクロール: ズーム
+        <button onclick="hideActivities()" style="margin-top: 15px; background: #444; border: 1px solid #666; color: white; padding: 8px 16px; border-radius: 5px; cursor: pointer;">閉じる</button>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="robot-club.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000822, 1);
+        document.body.appendChild(renderer.domElement);
+
+        // スターウォーズ風照明
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(0, 10, 5);
+        scene.add(directionalLight);
+
+        // 美しい月を作成
+        const moonGeometry = new THREE.SphereGeometry(2.5, 64, 64);
+        
+        // メインの月のマテリアル
+        const moonMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                lightDirection: { value: new THREE.Vector3(0.5, 0.8, 1.0).normalize() }
+            },
+            vertexShader: `
+                varying vec3 vPosition;
+                varying vec3 vNormal;
+                varying vec2 vUv;
+                varying vec3 vWorldPosition;
+                varying vec3 vWorldNormal;
+                
+                void main() {
+                    vPosition = position;
+                    vNormal = normalize(normalMatrix * normal);
+                    vWorldNormal = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+                    vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                uniform vec3 lightDirection;
+                varying vec3 vPosition;
+                varying vec3 vNormal;
+                varying vec2 vUv;
+                varying vec3 vWorldPosition;
+                varying vec3 vWorldNormal;
+                
+                // 改良されたノイズ関数
+                float noise(vec2 p) {
+                    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+                }
+                
+                float fbm(vec2 p) {
+                    float value = 0.0;
+                    float amplitude = 0.5;
+                    for(int i = 0; i < 4; i++) {
+                        value += amplitude * noise(p);
+                        p *= 2.0;
+                        amplitude *= 0.5;
+                    }
+                    return value;
+                }
+                
+                void main() {
+                    // 基本の月の色（温かい黄色系）
+                    vec3 baseColor = vec3(1.0, 0.9, 0.6);
+                    vec3 shadowColor = vec3(0.6, 0.5, 0.3);
+                    
+                    // ライティング計算
+                    float NdotL = dot(vWorldNormal, lightDirection);
+                    float lighting = max(0.3, NdotL); // 最低限の明るさを確保
+                    
+                    // より自然なクレーターパターン
+                    float surface1 = fbm(vUv * 6.0);
+                    float surface2 = fbm(vUv * 12.0 + vec2(1.7, 2.3));
+                    float surface3 = fbm(vUv * 24.0 + vec2(3.1, 1.9));
+                    
+                    // 表面の凹凸
+                    float surfaceHeight = surface1 * 0.6 + surface2 * 0.3 + surface3 * 0.1;
+                    
+                    // クレーターによる色の変化（黄色系を保持）
+                    vec3 surfaceColor = mix(shadowColor, baseColor, surfaceHeight);
+                    
+                    // より立体的な陰影
+                    float shadowFactor = smoothstep(-0.2, 0.8, NdotL);
+                    vec3 litColor = mix(shadowColor * 0.7, surfaceColor, shadowFactor);
+                    
+                    // 最終的なライティング適用
+                    vec3 finalColor = litColor * lighting;
+                    
+                    // 月の縁の光（黄色いリムライト）
+                    vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+                    float rim = 1.0 - max(0.0, dot(vWorldNormal, viewDirection));
+                    rim = pow(rim, 2.5);
+                    vec3 rimColor = vec3(1.2, 1.0, 0.5) * rim * 0.8;
+                    
+                    finalColor += rimColor;
+                    
+                    // 全体的に黄色い光を追加
+                    vec3 ambientGlow = vec3(0.3, 0.25, 0.1);
+                    finalColor += ambientGlow;
+                    
+                    // 少し明るくして光らせる
+                    finalColor = pow(finalColor, vec3(0.9));
+                    
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `
+        });
+        
+        const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+        scene.add(moon);
+        
+        // 月の周りの光る輪（オーラ）- 黄色系に変更
+        const auraGeometry = new THREE.SphereGeometry(3.2, 32, 32);
+        const auraMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 }
+            },
+            vertexShader: `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normal;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                varying vec3 vNormal;
+                
+                void main() {
+                    float intensity = pow(0.8 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+                    vec3 auraColor = vec3(1.0, 0.8, 0.3); // 黄色いオーラ
+                    float pulse = 0.8 + 0.3 * sin(time * 1.5);
+                    gl_FragColor = vec4(auraColor * intensity * pulse, intensity * 0.4);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide
+        });
+        
+        const moonAura = new THREE.Mesh(auraGeometry, auraMaterial);
+        scene.add(moonAura);
+
+        // 軽量化された星空
+        const starGeometry = new THREE.BufferGeometry();
+        const starVertices = [];
+        for (let i = 0; i < 500; i++) {
+            starVertices.push(
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500
+            );
+        }
+        starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+        const starMaterial = new THREE.PointsMaterial({ color: 0x00ffff, size: 1 });
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+
+        // カメラを調整（テキストがよく見える位置）
+        camera.position.set(0, 5, 25);
+        camera.lookAt(0, 0, -10);
+
+        // UI制御
+        function showActivities() {
+            document.getElementById('activityPanel').classList.add('show');
+        }
+
+        function hideActivities() {
+            document.getElementById('activityPanel').classList.remove('show');
+        }
+
+        // アニメーションループ
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            // 月のマテリアルに時間とライト方向を渡す
+            moonMaterial.uniforms.time.value = time;
+            moonMaterial.uniforms.lightDirection.value.set(
+                Math.cos(time * 0.1) * 0.5,
+                0.8,
+                Math.sin(time * 0.1) * 0.5 + 1.0
+            ).normalize();
+            auraMaterial.uniforms.time.value = time;
+            
+            // 月の回転
+            moon.rotation.y += 0.005;
+            moonAura.rotation.y += 0.003;
+            
+            // 星空の回転
+            stars.rotation.y += 0.0003;
+            
+            renderer.render(scene, camera);
+        }
+
+        // レスポンシブ対応
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 初期化
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    setTimeout(() => loading.style.display = 'none', 2000);
+                }
+            }, 1500);
+            animate();
+        });
+
+        // グローバル関数
+        window.showActivities = showActivities;
+        window.hideActivities = hideActivities;
+    </script>
 </body>
 </html>
